@@ -1,0 +1,50 @@
+﻿@using CSV;
+@model IList<EmployeePairResult>
+@{
+    ViewData["Title"] = "Index";
+}
+<h1>Index</h1>
+@using (Html.BeginForm("Index", "EmployeePair", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <input type="file" name="file" accept="text/csv" />
+    <input type="submit" value="Upload" />
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Employee 1
+            </th>
+            <th>
+                Employee 2
+            </th>
+            <th>
+                Project
+            </th>
+            <th>
+                Worked Days
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmployeeId1)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmployeeId2)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProjectId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WorkedDays)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
