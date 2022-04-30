@@ -31,24 +31,35 @@ namespace CSV
         /// <param name="reader"></param>
         /// <returns>IList<EmployeeAssignment></returns>
         /// <exception cref="FormatException"></exception>
-        public IList<EmployeeAssignment> ConvertFromFile(IList<string> csvLines)
+        public IList<EmployeeAssignment> ConvertFromFile(IList<string> csvLines,
+            string? dateFormat = null, string? twoLetter = null)
         {
             var result = new List<EmployeeAssignment>();
 
-            var lines = csvLines.Select(q => q.Split(',').ToList());
+            var lines = csvLines.Select(q => q.Split(',').Select(p => p.Trim()).ToList());
             if (lines.Any(q => q.Count != 4))
                 throw new FormatException("CSV file format is wrong! Must be 4 columns on line!");
+
+            var cultureInfo = CultureInfo.InvariantCulture;
+            if (!string.IsNullOrEmpty(twoLetter))
+                cultureInfo = new CultureInfo(twoLetter);
 
             result = lines.Select(line =>
                 new EmployeeAssignment()
                 {
-                    EmployeeId = Convert.ToInt32(line[0], CultureInfo.InvariantCulture),
-                    ProjectId = Convert.ToInt32(line[1], CultureInfo.InvariantCulture),
-                    DateFrom = Convert.ToDateTime(line[2], CultureInfo.InvariantCulture),
-                    DateTo = line[3].Trim().ToUpperInvariant() == "NULL" ? DateTime.Now : Convert.ToDateTime(line[3], CultureInfo.InvariantCulture)
+                    EmployeeId = Convert.ToInt32(line[0], cultureInfo),
+                    ProjectId = Convert.ToInt32(line[1], cultureInfo),
+                    DateFrom = !string.IsNullOrEmpty(dateFormat) ?
+                        DateTime.ParseExact(line[2], dateFormat ?? string.Empty, null) :
+                        Convert.ToDateTime(line[2], cultureInfo),
+                    DateTo = line[3].ToUpperInvariant() == "NULL" ?
+                        DateTime.Now :
+                        !string.IsNullOrEmpty(dateFormat) ?
+                            DateTime.ParseExact(line[3], dateFormat ?? string.Empty, null) :
+                            Convert.ToDateTime(line[3], cultureInfo)
                 })
                 .ToList();
-            
+
             var invalidRows = result.GroupBy(q => q.EmployeeId.ToString() + '-' + q.ProjectId.ToString()).Where(q => q.Count() > 1).ToList();
             if (invalidRows.Count > 0)
                 throw new Exception($"There are duplicated rows. Combination of EmployeeID and ProjectId must be unique! {string.Join(",", invalidRows.Select(q => $"[{q.Key}]"))}");
@@ -91,7 +102,7 @@ namespace CSV
             var employeeId1 = 0;
             var employeeId2 = 0;
             var overlapMax = TimeSpan.Zero;
-            
+
             for (int i = 0; i < list.Count - 1; i++)
             {
                 for (int j = i + 1; j < list.Count; j++)

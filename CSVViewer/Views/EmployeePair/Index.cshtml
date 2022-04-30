@@ -1,4 +1,5 @@
 ﻿@using CSV;
+@using System.Globalization;
 @model IList<EmployeePairResult>
 @{
     ViewData["Title"] = "Index";
@@ -8,7 +9,18 @@
 {
     <input type="file" name="file" accept="text/csv" />
     <input type="submit" value="Upload" />
+    <select name="cultureInfos">
+        <option></option>
+        @foreach (var item in CultureInfo.GetCultures(CultureTypes.NeutralCultures))
+        {
+            <option value="@item.TwoLetterISOLanguageName">@item.DisplayName</option>
+        }
+    </select>
+
+    <input type="text"  name="dateFormat"/>
 }
+
+
 
 <table id="employeePairs">
     <thead>

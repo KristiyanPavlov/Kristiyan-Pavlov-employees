@@ -19,10 +19,11 @@ namespace CSVViewer.Controllers
                 try
                 {
                     var lines = csvFile.Files[0].ReadAsList();
-                    var employeeAssignments = CSVConvertor.GetInstance().ConvertFromFile(await lines);
-                    var employeePairResults = await CSVConvertor.GetInstance().GetEmployeePairs(employeeAssignments);
+                    var employeeAssignments = CSVConvertor.GetInstance()
+                        .ConvertFromFile(await lines, csvFile["dateformat"], csvFile["cultureInfos"]);
+                    var employeePairResults = CSVConvertor.GetInstance().GetEmployeePairs(employeeAssignments);
 
-                    return View(employeePairResults);
+                    return View(await employeePairResults);
                 }
                 catch (Exception ex)
                 {
