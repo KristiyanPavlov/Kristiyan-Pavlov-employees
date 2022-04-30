@@ -10,18 +10,22 @@
     <input type="file" name="file" accept="text/csv" />
     <input type="submit" value="Upload" />
     <select name="cultureInfos">
-        <option></option>
+        <option value="" disabled selected>Choose culture</option>
         @foreach (var item in CultureInfo.GetCultures(CultureTypes.NeutralCultures))
         {
             <option value="@item.TwoLetterISOLanguageName">@item.DisplayName</option>
         }
     </select>
 
-    <input type="text"  name="dateFormat"/>
+    <input type="text" name="dateFormat" placeholder="Date format" 
+    title="dd - day
+MM - month
+yy - year
+HH - hour (24)
+hh - hour (12)
+mm - minute"/>
 }
-
-
-
+<tr></tr>
 <table id="employeePairs">
     <thead>
         <tr>
