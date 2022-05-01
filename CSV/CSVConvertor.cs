@@ -94,7 +94,7 @@ namespace CSV
 
             await Task.WhenAll(taskList.ToArray());
 
-            return result;
+            return result.OrderByDescending(q => q.WorkedDays).ToList();
         }
 
         private EmployeePairResult? GetEmployeePairForProject(int projectId, IList<EmployeeAssignment> list)
@@ -118,7 +118,7 @@ namespace CSV
             }
 
             if (overlapMax > TimeSpan.Zero)
-                return new EmployeePairResult(employeeId1, employeeId2, projectId, (int)overlapMax.TotalDays);
+                return new EmployeePairResult(employeeId1, employeeId2, projectId, (int)Math.Ceiling(overlapMax.TotalDays));
 
             return null;
         }

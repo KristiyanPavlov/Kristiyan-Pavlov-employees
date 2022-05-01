@@ -9,21 +9,27 @@
 {
     <input type="file" name="file" accept="text/csv" />
     <input type="submit" value="Upload" />
-    <select name="cultureInfos">
-        <option value="" disabled selected>Choose culture</option>
-        @foreach (var item in CultureInfo.GetCultures(CultureTypes.NeutralCultures))
-        {
-            <option value="@item.TwoLetterISOLanguageName">@item.DisplayName</option>
-        }
-    </select>
+    <div class="dropdown">
+        <input type="text" placeholder="Search culture..." id="searchCulture" 
+        onkeyup="filterCultures()" onfocus="showCultureDropDown()">
+        <div id="cultureinfo-dropdown" class="dropdown-content">
+            <select name="cultureInfos">
+                <option value="" disabled selected>Choose culture</option>
+                @foreach (var item in CultureInfo.GetCultures(CultureTypes.AllCultures))
+                {
+                    <option value="@item.TwoLetterISOLanguageName">@item.DisplayName</option>
+                }
+            </select>
+        </div>
+    </div>
 
-    <input type="text" name="dateFormat" placeholder="Date format" 
-    title="dd - day
+    <input type="text" name="dateFormat" placeholder="Date format"
+       title="dd - day
 MM - month
 yy - year
 HH - hour (24)
 hh - hour (12)
-mm - minute"/>
+mm - minute" />
 }
 <tr></tr>
 <table id="employeePairs">
