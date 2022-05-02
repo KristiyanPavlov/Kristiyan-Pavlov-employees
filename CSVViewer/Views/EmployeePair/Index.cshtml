@@ -9,17 +9,16 @@
 {
     <input type="file" name="file" accept="text/csv" />
     <input type="submit" value="Upload" />
+    <input type="text" id="cultureInfosValue" readonly>
+    <input type="hidden" name ="cultureInfos" id="cultureInfos">
     <div class="dropdown">
-        <input type="text" placeholder="Search culture..." id="searchCulture" 
-        onkeyup="filterCultures()" onfocus="showCultureDropDown()">
+        <input type="text" placeholder="Search culture..." id="searchCulture"
+           onkeyup="filterCultures()" onfocus="showCultureDropDown()">
         <div id="cultureinfo-dropdown" class="dropdown-content">
-            <select name="cultureInfos">
-                <option value="" disabled selected>Choose culture</option>
-                @foreach (var item in CultureInfo.GetCultures(CultureTypes.AllCultures))
-                {
-                    <option value="@item.TwoLetterISOLanguageName">@item.DisplayName</option>
-                }
-            </select>
+            @foreach (var item in CultureInfo.GetCultures(CultureTypes.AllCultures))
+            {
+                <a onclick="SetValue('@item.TwoLetterISOLanguageName','@item.DisplayName');">@item.DisplayName</a>
+            }
         </div>
     </div>
 

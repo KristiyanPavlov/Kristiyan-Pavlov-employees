@@ -7,18 +7,22 @@ function showCultureDropDown() {
 }
 
 function filterCultures() {
-    var input, filter, ul, li, a, i;
+    let input, filter, a, i;
     input = document.getElementById("searchCulture");
     filter = input.value.toUpperCase();
     div = document.getElementById("cultureinfo-dropdown");
-    a = div.getElementsByTagName("option");
+    a = div.getElementsByTagName("a");
     for (i = 0; i < a.length; i++) {
         txtValue = a[i].textContent || a[i].innerText;
         if (txtValue.toUpperCase().indexOf(filter) > -1) {
             a[i].style.display = "";
-            a[i].selected = true;
         } else {
             a[i].style.display = "none";
         }
     }
+}
+
+function SetValue(value, displayValue) {
+    document.getElementById("cultureInfos").value = value;
+    document.getElementById("cultureInfosValue").value = displayValue;
 }
