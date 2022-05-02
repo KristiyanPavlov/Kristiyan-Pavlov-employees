@@ -4,6 +4,7 @@
 // Write your JavaScript code.
 function showCultureDropDown() {
     document.getElementById("cultureinfo-dropdown").classList.toggle("show");
+    document.getElementById("searchCulture").focus();
 }
 
 function filterCultures() {
